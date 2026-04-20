@@ -3,17 +3,26 @@ venv/
 .env
 .env.*
 !.env.example
+*.iml
+*.class
+*.burp
 
 **/__pycache__/
 **/*.py[cod]
+**/.tmp/
+**/.idea/
 
 .idea/
 
 burp-extension/build/
 burp-extension/.gradle/
+burp-extension/META-INF/
+burp-extension/TmpMontoyaIntrospect.java
+burp-extension/TmpMontoyaIntrospect.class
 
 server/memory/*.jsonl
 server/memory/endpoint_cache.json
 server/rag/kb_index.json
 out/
 artifacts/
+%sn  installed; fi; done
