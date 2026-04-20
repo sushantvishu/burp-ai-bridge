@@ -1,0 +1,96 @@
+{
+  "version": "2026-04-06",
+  "packs": [
+    {
+      "id": "shannon_validation_impact_pack",
+      "name": "Shannon-inspired validation and impact pack",
+      "style": "validation-impact",
+      "origin": "conceptual-from-KeygraphHQ/shannon",
+      "license_note": "Reimplemented locally from high-level ideas only.",
+      "summary": "Validation-first pack for deciding whether a finding is reportable, what evidence is missing, and when a severity upgrade is defensible.",
+      "applies_to": [
+        "general",
+        "idor",
+        "access-control",
+        "authentication",
+        "business-logic",
+        "csrf",
+        "deserialization",
+        "file-upload",
+        "http-request-smuggling",
+        "mass-assignment",
+        "session-management",
+        "ssrf",
+        "stored-xss",
+        "xss",
+        "xxe",
+        "sqli",
+        "graphql",
+        "api-bola",
+        "api-bfl"
+      ],
+      "global_guidance": {
+        "validation_focus": [
+          "Ask whether the current evidence proves the control failure itself or only a noisy side effect.",
+          "Lower confidence automatically when the missing evidence list is still longer than the confirmed signal list."
+        ],
+        "impact_focus": [
+          "Upgrade impact only when the bridge can describe the business consequence in one sentence tied to the captured evidence.",
+          "Prefer reportability wording that names the affected trust boundary, not only the bug class."
+        ],
+        "reporting_focus": [
+          "Every severity claim should map to one explicit evidence artifact and one explicit business impact sentence.",
+          "If the operator cannot state what is still missing, the finding is not ready for a strong severity claim."
+        ],
+        "stop_conditions": [
+          "Stop escalation when the next proof would require out-of-scope behavior or uncontrolled payload expansion.",
+          "Do not use multiple weak indicators as a substitute for one clean confirmation artifact."
+        ]
+      },
+      "class_overrides": {
+        "http-request-smuggling": {
+          "validation_focus": [
+            "Separate front-end and back-end desynchronization evidence from downstream impact evidence.",
+            "Treat queue poisoning, access-control bypass, and cache poisoning as separate promotion branches."
+          ],
+          "impact_focus": [
+            "Severity promotion needs a concrete downstream effect such as protected-path access, response poisoning, or credential exposure.",
+            "Parser disagreement alone is not the final claim."
+          ]
+        },
+        "xxe": {
+          "validation_focus": [
+            "Distinguish parser acceptance, entity resolution, and outbound or local-file effects.",
+            "A parser error difference is only the first rung, not the final proof."
+          ],
+          "impact_focus": [
+            "Upgrade impact only when local file access, backend fetch behavior, or privileged service access is evidenced.",
+            "Keep the report language precise about what the parser actually did."
+          ]
+        },
+        "stored-xss": {
+          "validation_focus": [
+            "Confirm who can store the payload, who can observe it, and whether the render survives a separate session or role.",
+            "Viewer context is part of validation, not just impact."
+          ],
+          "impact_focus": [
+            "Promotion depends on viewer privilege, durable rendering, and the reachable action surface from that viewer context.",
+            "Do not frame stored XSS as high severity until the viewing audience and sink are explicit."
+          ]
+        },
+        "csrf": {
+          "validation_focus": [
+            "Validate token, origin, and referer handling separately before treating the request as reportable.",
+            "Reportable CSRF needs a genuine state-changing path and evidence that browser trust assumptions failed."
+          ]
+        },
+        "mass-assignment": {
+          "impact_focus": [
+            "Promotion requires state-change proof on a server-managed field such as role, ownership, approval, or billing status.",
+            "Silent acceptance alone is weaker than a demonstrated state-change."
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "accepted-auth-bypass-001",
+  "platform": "intigriti",
+  "outcome": "accepted",
+  "vuln_class": "auth-bypass",
+  "phrase": "The bypass reaches an administrator-only export action without the intended identity check, proving access to a higher-privilege workflow rather than a cosmetic route exposure.",
+  "wording_bucket": "just_right",
+  "notes": [
+    "Accepted-style example that ties the bypass to one concrete privileged action."
+  ]
+}

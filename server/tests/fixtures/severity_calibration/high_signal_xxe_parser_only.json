@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "raw_request": "POST /stock HTTP/1.1",
+    "target_url": "https://example.com/stock"
+  },
+  "validation": {
+    "validation_status": "confirmed",
+    "hypothesis": {
+      "vuln_class": "xxe"
+    },
+    "evidence_score": 2.4,
+    "evidence_count": 1,
+    "missing_evidence": [
+      "Need one confirmed parser-side effect."
+    ]
+  },
+  "impact": {
+    "reportable": true,
+    "reportability": "high",
+    "business_impact_class": "high-impact",
+    "confirmation_state": "confirmed",
+    "dashboard_issue": {
+      "severity": "high"
+    },
+    "evidence_score": 2.4,
+    "evidence_count": 1,
+    "evidence_gaps": [
+      "Need one confirmed parser-side effect."
+    ]
+  },
+  "expected": {
+    "severity": "medium"
+  }
+}

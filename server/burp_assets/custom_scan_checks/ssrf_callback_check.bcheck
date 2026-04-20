@@ -1,0 +1,30 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge SSRF Callback Check"
+    description: "Bounded active check that places one Collaborator payload into URL-like query or body insertion points."
+    author: "AI Bridge"
+    tags: "active", "ssrf", "collaborator", "bounded"
+
+define:
+    callback = `https://{generate_collaborator_address()}/bridge-ssrf`
+
+given query or body insertion point then
+    if {base.request} matches "(?i)(url|uri|endpoint|dest|destination|callback|webhook|feed|proxy|image|avatar|redirect)" then
+        send payload:
+            replacing: {callback}
+
+        if http interactions then
+            report issue:
+                severity: medium
+                confidence: firm
+                detail: "A bounded Collaborator callback was triggered from a URL-like insertion point. Correlate the interaction with the exact request variant before escalating impact."
+                remediation: "Restrict outbound fetch targets, validate schemes and hosts, and isolate server-side request functionality."
+
+        else if dns interactions then
+            report issue:
+                severity: info
+                confidence: tentative
+                detail: "A DNS-only Collaborator interaction was observed from a URL-like insertion point. Confirm that the interaction comes from the target application and not an intermediary."
+                remediation: "Validate and restrict outbound destination handling and confirm the exact fetch behavior manually."
+        end if
+    end if

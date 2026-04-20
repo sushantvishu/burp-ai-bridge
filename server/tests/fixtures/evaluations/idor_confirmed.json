@@ -1,0 +1,86 @@
+{
+  "name": "idor_confirmed",
+  "payload": {
+    "raw_request": "GET /api/invoices/104?view=summary HTTP/1.1\r\nHost: example.com\r\nCookie: session=abc123supersecretvalue\r\n\r\n",
+    "target_url": "https://example.com/api/invoices/104?view=summary",
+    "http_method": "GET",
+    "source_tool": "repeater",
+    "burp_dashboard_issue": {
+      "name": "Insecure direct object reference",
+      "severity": "high",
+      "confidence": "firm",
+      "detail": "Unauthorized access to another tenant invoice details.",
+      "request_refs": ["proxy-104"],
+      "affected_urls": ["https://example.com/api/invoices/104"]
+    }
+  },
+  "advisory": {
+    "analysis": "Confirmed access-control weakness on invoice retrieval.",
+    "analysis_backend": "mcp",
+    "fallback_used": false,
+    "primary_next_action": "Capture one role-separated diff for the same invoice before claiming tenant-wide exposure.",
+    "questions_for_user": [],
+    "confirmation_playbooks": [
+      "Confirm the same invoice ID across two permitted identities.",
+      "Document the exact fields that changed across accounts."
+    ],
+    "impact_paths": [
+      "Unauthorized access to another tenant's invoice details without authorization."
+    ],
+    "potential_vulnerabilities": [
+      "[authorization] cross-tenant invoice read"
+    ],
+    "burp_action_checklist": [
+      "Send the invoice baseline to Repeater.",
+      "Repeat with the second identity."
+    ],
+    "request_plan": [
+      "baseline",
+      "role diff"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "authorization",
+        "summary": "[authorization] cross-tenant invoice read",
+        "confidence": 0.91,
+        "status": "confirmed",
+        "impact_paths": [
+          "Unauthorized access to another tenant's invoice details without authorization."
+        ],
+        "next_checks": [
+          "Record role-separated diff."
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "source": "proxy",
+        "evidence_type": "traffic-history",
+        "summary": "Role A invoice baseline",
+        "confidence": 0.7
+      },
+      {
+        "source": "repeater",
+        "evidence_type": "role-compare",
+        "summary": "Role B sees the same invoice details",
+        "confidence": 0.82
+      },
+      {
+        "source": "burp-dashboard",
+        "evidence_type": "scanner",
+        "summary": "IDOR scanner issue",
+        "confidence": 0.88
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "confirmed",
+    "reportable": true,
+    "reportability": "high",
+    "business_impact_class": "high-impact",
+    "safe_to_expand": true
+  }
+}

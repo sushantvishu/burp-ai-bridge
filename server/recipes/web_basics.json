@@ -1,0 +1,112 @@
+[
+  {
+    "id": "login_csrf_review",
+    "vuln_class": "csrf",
+    "title": "Login Form CSRF Review",
+    "severity": "medium",
+    "summary": "A login or state-changing HTML form appears present without an obvious anti-CSRF token marker in the response body.",
+    "all_of": ["response_has_html_form", "response_has_password_field"],
+    "none_of": ["response_has_csrf_marker"],
+    "nuclei_tags": ["csrf", "login"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt",
+    "operator_questions": [
+      "Does the rendered form include any hidden anti-CSRF token not visible in this captured response?",
+      "Does the application accept the same form submission from a cross-site origin without extra confirmation?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/csrf",
+      "https://book.hacktricks.wiki/en/pentesting-web/csrf-cross-site-request-forgery.html"
+    ]
+  },
+  {
+    "id": "session_cookie_hardening",
+    "vuln_class": "session-management",
+    "title": "Session Cookie Hardening Review",
+    "severity": "medium",
+    "summary": "The response sets session cookies but appears to miss one or more hardening flags such as Secure, HttpOnly, or SameSite.",
+    "all_of": ["response_sets_cookie"],
+    "any_of": [
+      "response_cookie_missing_secure",
+      "response_cookie_missing_httponly",
+      "response_cookie_missing_samesite"
+    ],
+    "nuclei_tags": ["exposure", "misconfig", "panel"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Are these cookies used for authenticated sessions or sensitive workflow state?",
+      "Does the application ever issue stronger cookie flags after login or privilege changes?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/burp/documentation/desktop/testing-workflow/vulnerabilities/session-management"
+    ]
+  },
+  {
+    "id": "missing_security_headers",
+    "vuln_class": "security-misconfiguration",
+    "title": "Browser Security Header Review",
+    "severity": "low",
+    "summary": "Common browser hardening headers appear to be absent from the response.",
+    "all_of": ["response_missing_security_headers"],
+    "response_content_types_any": ["text/html"],
+    "nuclei_tags": ["misconfig", "exposure"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Is this endpoint reachable in a browser context where missing clickjacking or MIME-sniff protections matter?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/access-control",
+      "https://github.com/m14r41/PentestingEverything"
+    ]
+  },
+  {
+    "id": "idor_bola_candidate",
+    "vuln_class": "access-control",
+    "title": "Identifier-Based Access Control Review",
+    "severity": "high",
+    "summary": "Identifier-like parameter names suggest testing object-level authorization consistency across users or tenants.",
+    "all_of": ["request_has_identifier_params"],
+    "nuclei_tags": ["idor", "auth-bypass", "api"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt",
+    "operator_questions": [
+      "Can you replay this request with another user's identifier while keeping the same session?",
+      "Is the identifier guessable, sequential, or leaked elsewhere in the application?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/access-control",
+      "https://psydck.medium.com/web-application-vulnerability-guide-vapt-now-live-on-github-%EF%B8%8F-e586713f33c4"
+    ]
+  },
+  {
+    "id": "admin_surface_review",
+    "vuln_class": "access-control",
+    "title": "Admin Surface Access Control Review",
+    "severity": "high",
+    "summary": "The request path looks administrative and should be checked for role enforcement and direct access bypass.",
+    "all_of": ["path_looks_admin"],
+    "nuclei_tags": ["auth-bypass", "panel"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt",
+    "operator_questions": [
+      "Does this path return different content for unauthenticated, low-privilege, and admin sessions?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/access-control"
+    ]
+  },
+  {
+    "id": "verbose_error_review",
+    "vuln_class": "information-disclosure",
+    "title": "Verbose Error Disclosure Review",
+    "severity": "medium",
+    "summary": "The response body preview contains framework or server error keywords that may expose internal details.",
+    "all_of": ["response_has_error_keywords"],
+    "nuclei_tags": ["exposure", "tech"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Can you reproduce the error consistently with malformed parameters or unexpected methods?"
+    ],
+    "source_refs": [
+      "https://github.com/m14r41/PentestingEverything",
+      "https://github.com/riramar/Web-Attack-Cheat-Sheet"
+    ]
+  }
+]

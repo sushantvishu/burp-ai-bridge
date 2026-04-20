@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "raw_request": "GET /api/invoices/104 HTTP/1.1\r\nHost: example.com\r\n\r\n",
+    "raw_response": "HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nContent-Length: 28\r\n\r\n{\"error\":\"forbidden\"}",
+    "target_url": "https://example.com/api/invoices/104",
+    "repeater_variant_observations": [
+      {
+        "tab_name": "variant-1",
+        "summary": "Swap id",
+        "request_text": "GET /api/invoices/999 HTTP/1.1\r\nHost: example.com\r\n\r\n",
+        "response_text": "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nX-Role: admin\r\nContent-Length: 124\r\n\r\n{\"invoiceId\":999,\"owner\":\"tenant-b\",\"amount\":4200}"
+      }
+    ]
+  },
+  "plan": {
+    "scanner_focus": {
+      "highlights": [
+        {"text": "invoiceId"}
+      ]
+    },
+    "repeater_variant_requests": [
+      {
+        "name": "variant-1",
+        "expected_signal": "200/403 diff"
+      }
+    ]
+  },
+  "expected": {
+    "best_tab": "variant-1",
+    "min_score": 2.5,
+    "high_signal": true,
+    "status_transition": "403->200"
+  }
+}

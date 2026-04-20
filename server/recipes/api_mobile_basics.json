@@ -1,0 +1,161 @@
+[
+  {
+    "id": "json_api_input_review",
+    "vuln_class": "input-validation",
+    "title": "JSON API Input Validation Review",
+    "severity": "medium",
+    "summary": "The endpoint accepts JSON input, so schema validation, mass assignment, and injection-safe parsing should be reviewed.",
+    "all_of": ["request_has_json_body"],
+    "nuclei_tags": ["api", "json", "misconfig"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/api/api-endpoints-res.txt",
+    "operator_questions": [
+      "Can you add extra JSON fields or type-confused values without server-side rejection?",
+      "Does changing numeric or identifier fields affect objects owned by other users?"
+    ],
+    "source_refs": [
+      "https://github.com/m14r41/PentestingEverything",
+      "https://psydck.medium.com/web-application-vulnerability-guide-vapt-now-live-on-github-%EF%B8%8F-e586713f33c4"
+    ]
+  },
+  {
+    "id": "cors_review",
+    "vuln_class": "cors",
+    "title": "CORS Policy Review",
+    "severity": "medium",
+    "summary": "The response exposes CORS headers that may need validation for wildcard or reflected-origin behavior.",
+    "all_of": ["response_has_cors_header"],
+    "nuclei_tags": ["cors", "misconfig"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does the server reflect arbitrary Origin headers or allow credentials with broad origins?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/cors",
+      "https://book.hacktricks.wiki/en/pentesting-web/cors-bypass.html"
+    ]
+  },
+  {
+    "id": "cors_reflection_high_risk",
+    "vuln_class": "cors",
+    "title": "Reflected CORS Origin Review",
+    "severity": "high",
+    "summary": "The response appears to reflect the request Origin or use wildcard CORS, which can weaken browser-enforced access restrictions.",
+    "all_of": ["response_has_cors_header", "response_cors_reflects_origin"],
+    "nuclei_tags": ["cors", "auth-bypass", "misconfig"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Are cookies or Authorization tokens accepted on cross-origin requests to this endpoint?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/cors",
+      "https://book.hacktricks.wiki/en/pentesting-web/cors-bypass.html"
+    ]
+  },
+  {
+    "id": "mobile_api_auth_review",
+    "vuln_class": "authentication",
+    "title": "Mobile/API Auth Context Review",
+    "severity": "medium",
+    "summary": "The request carries bearer-style authorization and should be checked for role scoping, token audience, and object-level authorization.",
+    "all_of": ["request_has_authorization"],
+    "nuclei_tags": ["api", "auth-bypass", "token"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/api/api-endpoints-res.txt",
+    "operator_questions": [
+      "Does the same token access data for other users, devices, or tenants when identifier fields are changed?"
+    ],
+    "source_refs": [
+      "https://github.com/m14r41/PentestingEverything",
+      "https://psydck.medium.com/web-application-vulnerability-guide-vapt-now-live-on-github-%EF%B8%8F-e586713f33c4"
+    ]
+  },
+  {
+    "id": "file_upload_review",
+    "vuln_class": "file-upload",
+    "title": "File Upload Handling Review",
+    "severity": "high",
+    "summary": "The request indicates multipart upload behavior and should be checked for content-type trust, extension filtering, and storage exposure.",
+    "all_of": ["request_has_file_upload"],
+    "nuclei_tags": ["upload", "rce", "exposure"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/extensions-common.txt",
+    "operator_questions": [
+      "Can you alter filename, content type, or double extensions without server-side rejection?",
+      "Are uploaded files served back from a web-accessible path or another origin?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/file-upload",
+      "https://github.com/riramar/Web-Attack-Cheat-Sheet"
+    ]
+  },
+  {
+    "id": "open_redirect_review",
+    "vuln_class": "open-redirect",
+    "title": "Redirect Parameter Review",
+    "severity": "medium",
+    "summary": "Redirect-like parameter names suggest checking whether the application allows off-domain navigation or token leakage via open redirect behavior.",
+    "all_of": ["request_has_redirect_params"],
+    "nuclei_tags": ["redirect", "auth-bypass"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Can redirect or return-style parameters send the browser to an external domain after auth or workflow completion?",
+      "Do any OAuth or SSO flows trust these redirect values without strict allowlisting?"
+    ],
+    "source_refs": [
+      "https://github.com/EdOverflow/bugbounty-cheatsheet/tree/master/cheatsheets",
+      "https://github.com/riramar/Web-Attack-Cheat-Sheet"
+    ]
+  },
+  {
+    "id": "ssrf_style_url_input_review",
+    "vuln_class": "ssrf",
+    "title": "Server-Side URL Fetch Review",
+    "severity": "high",
+    "summary": "URL-like input parameters suggest checking whether the server fetches external or internal resources on behalf of the client.",
+    "all_of": ["request_has_url_input_params"],
+    "nuclei_tags": ["ssrf", "network", "api"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does changing URL-like parameters make the server fetch internal hosts, localhost, or cloud metadata endpoints?",
+      "Are protocols, ports, redirects, or DNS rebinding behaviors filtered server-side?"
+    ],
+    "source_refs": [
+      "https://github.com/EdOverflow/bugbounty-cheatsheet/tree/master/cheatsheets",
+      "https://book.hacktricks.wiki/"
+    ]
+  },
+  {
+    "id": "xml_xxe_review",
+    "vuln_class": "xxe",
+    "title": "XML / XXE Review",
+    "severity": "high",
+    "summary": "XML input should be reviewed for unsafe parser behavior, external entities, and SSRF-style resolution paths.",
+    "all_of": ["request_has_xml_body"],
+    "nuclei_tags": ["xxe", "ssrf", "xml"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does the endpoint parse XML with DTD or external entity support enabled?",
+      "Can XML input influence outbound requests, local file reads, or parser errors?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/xxe",
+      "https://book.hacktricks.wiki/"
+    ]
+  },
+  {
+    "id": "reflected_input_review",
+    "vuln_class": "xss",
+    "title": "Reflected Input Review",
+    "severity": "medium",
+    "summary": "Search-like or user-controlled input parameters in an HTML response should be reviewed for reflection, context, and output encoding.",
+    "all_of": ["request_has_search_like_params", "response_has_html"],
+    "nuclei_tags": ["xss", "reflection"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/XSS/xss-strings.txt",
+    "operator_questions": [
+      "Are any query or form parameters reflected in the HTML response, script context, attributes, or inline JSON?",
+      "Does the response encode or sanitize user-controlled input consistently across contexts?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/cross-site-scripting",
+      "https://github.com/EdOverflow/bugbounty-cheatsheet/tree/master/cheatsheets"
+    ]
+  }
+]

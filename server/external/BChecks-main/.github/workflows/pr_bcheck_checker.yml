@@ -1,0 +1,21 @@
+name: Pull Request BCheckChecker
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'oracle'
+
+      - name: Validate BChecks
+        run: |
+          [ $(sha256sum BCheckChecker-1.9.jar | awk '{ print $1 }') = 'a4e1ebffc0dabcea7e93778b86ab053b406a15782e4ffb0da48e3638a23f077d' ]
+          java -jar BCheckChecker-1.9.jar

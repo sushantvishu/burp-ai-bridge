@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "raw_request": "POST /comments HTTP/1.1",
+    "target_url": "https://example.com/comments"
+  },
+  "validation": {
+    "validation_status": "confirmed",
+    "hypothesis": {
+      "vuln_class": "xss"
+    },
+    "evidence_score": 2.7,
+    "evidence_count": 1,
+    "missing_evidence": [
+      "Need one separate viewer-context confirmation."
+    ]
+  },
+  "impact": {
+    "reportable": true,
+    "reportability": "high",
+    "business_impact_class": "high-impact",
+    "confirmation_state": "confirmed",
+    "dashboard_issue": {
+      "severity": "high"
+    },
+    "evidence_score": 2.7,
+    "evidence_count": 1,
+    "evidence_gaps": [
+      "Need one separate viewer-context confirmation."
+    ]
+  },
+  "expected": {
+    "severity": "medium"
+  }
+}

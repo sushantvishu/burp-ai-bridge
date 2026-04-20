@@ -1,0 +1,196 @@
+[
+  {
+    "id": "graphql_api_review",
+    "vuln_class": "graphql",
+    "title": "GraphQL Endpoint Review",
+    "severity": "medium",
+    "summary": "The request or response looks like GraphQL traffic and should be reviewed for schema exposure, field-level authorization, and method/content-type weaknesses.",
+    "any_of": ["request_has_graphql_marker", "response_has_graphql_error"],
+    "nuclei_tags": ["graphql", "api", "misconfig"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/api/api-endpoints-res.txt",
+    "operator_questions": [
+      "Does this GraphQL endpoint accept GET or form-urlencoded requests in addition to the expected POST JSON flow?",
+      "Can you confirm whether introspection, aliases, or object ID arguments change the authorization surface for this endpoint?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/graphql",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "mass_assignment_review",
+    "vuln_class": "mass-assignment",
+    "title": "Mass Assignment / Auto-Binding Review",
+    "severity": "high",
+    "summary": "The JSON body includes privilege-related fields and should be checked for silent acceptance of server-managed properties.",
+    "methods_any": ["POST", "PUT", "PATCH"],
+    "all_of": ["request_has_json_body", "request_has_privileged_json_keys"],
+    "nuclei_tags": ["api", "logic", "mass-assignment"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/api/api-endpoints-res.txt",
+    "operator_questions": [
+      "Are fields like role, admin, permissions, price, balance, or status meant to be server-controlled for this operation?",
+      "Does the server ignore, normalize, or persist these sensitive JSON fields when you replay the same request?"
+    ],
+    "source_refs": [
+      "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "https://portswigger.net/web-security/graphql"
+    ]
+  },
+  {
+    "id": "path_traversal_review",
+    "vuln_class": "path-traversal",
+    "title": "Path Traversal / File Retrieval Review",
+    "severity": "high",
+    "summary": "File or path-style inputs suggest reviewing filename normalization and arbitrary file access boundaries.",
+    "any_of": ["request_has_path_input_params", "request_has_url_input_params"],
+    "path_keywords_any": ["download", "file", "export", "view", "template", "preview", "attachment"],
+    "param_names_any": ["path", "file", "filename", "template", "view", "document", "download"],
+    "nuclei_tags": ["lfi", "path-traversal", "file-read"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt",
+    "operator_questions": [
+      "Does the endpoint read local files, templates, exports, or generated documents based on client-supplied path values?",
+      "Do simple path normalization changes alter whether the server rejects, normalizes, or retrieves content?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/file-path-traversal",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "request_smuggling_review",
+    "vuln_class": "http-request-smuggling",
+    "title": "HTTP Request Smuggling Review",
+    "severity": "high",
+    "summary": "Conflicting request-length framing or chunked transfer hints should be reviewed for front-end versus back-end parsing differences.",
+    "methods_any": ["POST", "PUT", "PATCH"],
+    "any_of": ["request_has_conflicting_length_headers", "request_has_chunked_transfer"],
+    "nuclei_tags": ["http", "smuggling", "desync"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does this request pass through a proxy, load balancer, CDN, or other front-end component before it reaches the application?",
+      "Can you confirm whether a one-header framing change causes a front-end versus back-end response mismatch without broad fuzzing?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/request-smuggling",
+      "https://owasp.org/Top10/2025/"
+    ]
+  },
+  {
+    "id": "deserialization_review",
+    "vuln_class": "deserialization",
+    "title": "Unsafe Deserialization Review",
+    "severity": "high",
+    "summary": "Serialized-object style markers suggest the endpoint may deserialize structured client input and should be reviewed for parser and integrity risks.",
+    "all_of": ["request_has_serialized_blob"],
+    "any_of": ["request_has_json_body", "request_has_form_body", "response_has_error_keywords"],
+    "param_names_any": ["data", "state", "object", "payload", "session", "token"],
+    "nuclei_tags": ["deserialization", "java", "php"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Is this opaque blob or serialized structure expected to be generated and validated by the server rather than trusted from the client?",
+      "Do small structural changes trigger parser, type, or integrity-check errors that suggest server-side deserialization?"
+    ],
+    "source_refs": [
+      "https://owasp.org/Top10/2025/",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "ssti_review",
+    "vuln_class": "ssti",
+    "title": "Server-Side Template Injection Review",
+    "severity": "high",
+    "summary": "Template-like inputs on rendering, preview, or email-style routes should be reviewed for server-side evaluation of user-controlled expressions.",
+    "any_of": ["request_has_template_input_params", "request_has_search_like_params"],
+    "path_keywords_any": ["render", "template", "preview", "email", "invoice"],
+    "param_names_any": ["template", "view", "preview", "content", "html", "body", "message", "name"],
+    "response_content_types_any": ["text/html"],
+    "nuclei_tags": ["ssti", "template", "injection"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/template-engines-special-vars.txt",
+    "operator_questions": [
+      "Does this route render server-side templates, generated emails, previews, or invoices using user-controlled fields?",
+      "Do simple expression-style markers evaluate, escape differently, or trigger template-engine specific errors?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/server-side-template-injection",
+      "https://book.hacktricks.wiki/"
+    ]
+  },
+  {
+    "id": "secret_exposure_review",
+    "vuln_class": "secret-exposure",
+    "title": "Secret Exposure Review",
+    "severity": "high",
+    "summary": "The response body appears to contain keys, tokens, or private material markers that should not be exposed to the client.",
+    "all_of": ["response_has_secret_keywords"],
+    "nuclei_tags": ["exposure", "secrets", "keys"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does the response include API keys, private key blocks, debug secrets, or environment data that should remain server-side?",
+      "Can you confirm whether the same exposure appears only on this route or across related debug, config, or error responses?"
+    ],
+    "source_refs": [
+      "https://owasp.org/Top10/2025/",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "crypto_failures_review",
+    "vuln_class": "crypto-failures",
+    "title": "Cryptographic Failures Review",
+    "severity": "medium",
+    "summary": "Transport or cookie protection signals suggest reviewing whether sensitive data is exposed without expected cryptographic safeguards.",
+    "all_of": ["request_has_authorization"],
+    "any_of": ["target_uses_plain_http", "response_cookie_missing_secure", "response_sets_cookie"],
+    "nuclei_tags": ["tls", "crypto", "cookie"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Is this sensitive route reachable over plain HTTP or with cookies that are usable without the Secure flag?",
+      "Do you see missing transport protections, weak key material handling, or other cryptographic control gaps around this flow?"
+    ],
+    "source_refs": [
+      "https://owasp.org/Top10/2025/",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "race_condition_review",
+    "vuln_class": "race-condition",
+    "title": "Race Condition Review",
+    "severity": "high",
+    "summary": "State-changing workflow requests should be reviewed for parallel execution windows and duplicate processing.",
+    "methods_any": ["POST", "PUT", "PATCH"],
+    "any_of": ["request_has_identifier_params", "request_has_json_body", "request_has_form_body"],
+    "path_keywords_any": ["checkout", "redeem", "transfer", "apply", "approve", "claim", "coupon", "purchase"],
+    "nuclei_tags": ["race", "logic", "workflow"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does this endpoint enforce one-time use, rate limits, balances, or state transitions that could be affected by parallel requests?",
+      "Can you reproduce a behavioral difference by replaying the same state-changing request in parallel Repeater tabs?"
+    ],
+    "source_refs": [
+      "https://portswigger.net/web-security/race-conditions",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  },
+  {
+    "id": "insecure_design_review",
+    "vuln_class": "insecure-design",
+    "title": "Insecure Design / Workflow Guardrail Review",
+    "severity": "medium",
+    "summary": "Security-critical workflows with client-controlled state or sequencing assumptions should be reviewed for missing server-side guardrails.",
+    "methods_any": ["POST", "PUT", "PATCH", "DELETE"],
+    "any_of": ["request_has_identifier_params", "request_has_json_body", "request_has_form_body"],
+    "path_keywords_any": ["checkout", "transfer", "redeem", "approve", "verify", "claim", "purchase", "coupon", "reset"],
+    "nuclei_tags": ["logic", "design", "workflow"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does this flow rely on client-visible sequencing, state, amount, or approval fields that should be enforced only on the server side?",
+      "Can you identify one skipped, replayed, or reordered step that still completes without the expected business control?"
+    ],
+    "source_refs": [
+      "https://owasp.org/Top10/2025/",
+      "https://owasp.org/www-project-web-security-testing-guide/v42/"
+    ]
+  }
+]

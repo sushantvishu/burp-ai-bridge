@@ -1,0 +1,108 @@
+{
+  "version": "2026-04-06",
+  "packs": [
+    {
+      "id": "portswigger_github_reference_pack",
+      "name": "PortSwigger and GitHub reference pack",
+      "style": "references",
+      "origin": "curated-local",
+      "license_note": "Reference links only.",
+      "summary": "Curated reference pack for PortSwigger Web Security, PortSwigger BChecks, and the repo-inspired methodology sources already discussed in this project.",
+      "applies_to": [
+        "general",
+        "idor",
+        "access-control",
+        "authentication",
+        "business-logic",
+        "csrf",
+        "deserialization",
+        "file-upload",
+        "graphql",
+        "http-request-smuggling",
+        "mass-assignment",
+        "open-redirect",
+        "path-traversal",
+        "race-condition",
+        "session-management",
+        "sqli",
+        "ssrf",
+        "stored-xss",
+        "xss",
+        "xxe",
+        "api-bola",
+        "api-bfl",
+        "api-bopla",
+        "api-unsafe-consumption"
+      ],
+      "global_guidance": {
+        "reference_priority": [
+          "Prefer PortSwigger Web Security Academy for class grounding and vocabulary.",
+          "Use PortSwigger BChecks and local KB notes for practical confirmation ladders.",
+          "Use Strix, Shannon, and HexStrike references conceptually for methodology, not as copied implementation."
+        ]
+      },
+      "class_overrides": {
+        "idor": {
+          "reference_links": [
+            "https://portswigger.net/web-security/access-control/idor",
+            "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/",
+            "https://github.com/usestrix/strix",
+            "https://github.com/KeygraphHQ/shannon"
+          ]
+        },
+        "ssrf": {
+          "reference_links": [
+            "https://portswigger.net/web-security/ssrf",
+            "https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/",
+            "https://github.com/0x4m4/hexstrike-ai",
+            "https://github.com/PortSwigger/BChecks"
+          ]
+        },
+        "stored-xss": {
+          "reference_links": [
+            "https://portswigger.net/web-security/cross-site-scripting/stored",
+            "https://owasp.org/Top10/A03_2021-Injection/",
+            "https://github.com/usestrix/strix",
+            "https://github.com/PortSwigger/BChecks"
+          ]
+        },
+        "csrf": {
+          "reference_links": [
+            "https://portswigger.net/web-security/csrf",
+            "https://owasp.org/www-community/attacks/csrf",
+            "https://github.com/PortSwigger/BChecks"
+          ]
+        },
+        "xxe": {
+          "reference_links": [
+            "https://portswigger.net/web-security/xxe",
+            "https://owasp.org/Top10/A05_2021-Security_Misconfiguration/",
+            "https://github.com/PortSwigger/BChecks"
+          ]
+        },
+        "http-request-smuggling": {
+          "reference_links": [
+            "https://portswigger.net/web-security/request-smuggling",
+            "https://github.com/PortSwigger/BChecks",
+            "https://github.com/KeygraphHQ/shannon"
+          ]
+        },
+        "mass-assignment": {
+          "reference_links": [
+            "https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/",
+            "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+            "https://github.com/0x4m4/hexstrike-ai"
+          ]
+        }
+      },
+      "reference_links": [
+        "https://portswigger.net/web-security",
+        "https://github.com/PortSwigger/BChecks",
+        "https://github.com/usestrix/strix",
+        "https://github.com/KeygraphHQ/shannon",
+        "https://github.com/0x4m4/hexstrike-ai",
+        "https://github.com/PortSwigger/mcp-server"
+      ]
+    }
+  ]
+}

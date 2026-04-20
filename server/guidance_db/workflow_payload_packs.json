@@ -1,0 +1,106 @@
+{
+  "version": "2026-04-06",
+  "packs": [
+    {
+      "id": "hexstrike_workflow_payload_pack",
+      "name": "HexStrike-inspired workflow and payload pack",
+      "style": "workflow-payload",
+      "origin": "conceptual-from-0x4m4/hexstrike-ai",
+      "license_note": "Reimplemented locally from high-level ideas only.",
+      "summary": "Workflow-oriented pack for choosing the next single Burp change, ordering variant requests, and recognizing when two findings belong to the same escalation chain.",
+      "applies_to": [
+        "general",
+        "idor",
+        "access-control",
+        "authentication",
+        "business-logic",
+        "csrf",
+        "deserialization",
+        "file-upload",
+        "graphql",
+        "mass-assignment",
+        "open-redirect",
+        "path-traversal",
+        "race-condition",
+        "session-management",
+        "sqli",
+        "ssrf",
+        "stored-xss",
+        "xss",
+        "api-bola",
+        "api-bfl",
+        "api-unsafe-consumption"
+      ],
+      "global_guidance": {
+        "workflow_focus": [
+          "Keep one best-next-step, one backup step, and one stop condition visible to the operator at all times.",
+          "Join two findings only when the same request, same object boundary, or same workflow transition ties them together."
+        ],
+        "payload_strategy": [
+          "Order variants from lowest-noise confirmation to highest business-signal confirmation.",
+          "Prefer payload ladders that explain what to compare after each send, not only what to send."
+        ],
+        "reporting_focus": [
+          "Keep variant naming stable so the strongest delta can be moved directly into the report as a proof artifact.",
+          "Record why one variant was better than the others, not just that it worked."
+        ]
+      },
+      "class_overrides": {
+        "authentication": {
+          "workflow_focus": [
+            "Model the flow as pre-login, login, post-login, logout, and stale-session replay before trying extra branches.",
+            "If another scanner-marked issue exists on the same auth flow, use it as a chained branch only when the same session boundary explains both."
+          ],
+          "payload_strategy": [
+            "Order the ladder as missing token, stale token, lower-privilege token, then post-logout replay.",
+            "After each send, compare redirect chain, cookie rotation, and protected-path visibility."
+          ]
+        },
+        "mass-assignment": {
+          "workflow_focus": [
+            "Keep the route and object fixed while toggling only one server-managed field at a time.",
+            "Prefer fields that map directly to role, ownership, approval, or billing state."
+          ],
+          "payload_strategy": [
+            "Start with low-risk role or status fields before broader nested-object mutations.",
+            "Compare silent acceptance, reflected acceptance, and state-change acceptance separately."
+          ]
+        },
+        "ssrf": {
+          "payload_strategy": [
+            "Sequence SSRF checks as absolute URL, alternate scheme, relative path, and normalization edge case.",
+            "Compare parser acceptance before assuming outbound network behavior."
+          ]
+        },
+        "csrf": {
+          "payload_strategy": [
+            "Sequence the CSRF comparison as baseline token, token removed, then origin or referer mismatch.",
+            "Keep the route and state-change target fixed while comparing token and browser trust signals."
+          ]
+        },
+        "stored-xss": {
+          "workflow_focus": [
+            "Treat storage, render, and viewer privilege as three separate workflow checkpoints.",
+            "Escalate only after the render survives beyond the submitting request context."
+          ],
+          "payload_strategy": [
+            "Sequence the checks as harmless context probe, storage confirmation, render confirmation, then viewer-impact confirmation.",
+            "Keep the viewer path explicit in tab naming and evidence notes."
+          ]
+        },
+        "mass-assignment": {
+          "workflow_focus": [
+            "Treat mass-assignment as a state-change workflow first, not only an input-validation issue.",
+            "Confirm which state-change field moved and whether the move persists on a follow-up read."
+          ]
+        }
+        ,
+        "http-request-smuggling": {
+          "workflow_focus": [
+            "Treat desynchronization as the first workflow checkpoint before any downstream branch such as queue poisoning or access-control impact."
+          ]
+        }
+      }
+    }
+  ]
+}

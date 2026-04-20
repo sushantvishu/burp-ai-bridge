@@ -1,0 +1,11 @@
+{
+  "id": "accepted-stored-xss-001",
+  "platform": "hackerone",
+  "outcome": "accepted",
+  "vuln_class": "stored-xss",
+  "phrase": "The stored payload renders in the moderation queue viewed by a higher-privilege user, which turns the issue into a cross-user execution path rather than a self-view only sink.",
+  "wording_bucket": "just_right",
+  "notes": [
+    "Accepted-style example that separates storage proof from the higher-value viewer path."
+  ]
+}

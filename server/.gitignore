@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.idea/
+.env
+.env.*
+!.env.example
+
+.pytest_cache/
+vendor/
+external/*.zip
+
+memory/*.jsonl
+memory/endpoint_cache.json
+rag/kb_index.json

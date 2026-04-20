@@ -1,0 +1,11 @@
+{
+  "id": "accepted-ssrf-001",
+  "platform": "intigriti",
+  "outcome": "accepted",
+  "vuln_class": "ssrf",
+  "phrase": "The webhook test reaches a controlled callback endpoint from the target environment, confirming a server-side fetch on the marked request family.",
+  "wording_bucket": "just_right",
+  "notes": [
+    "Accepted-style example that ties the SSRF proof to one bounded callback artifact instead of speculative internal reachability."
+  ]
+}

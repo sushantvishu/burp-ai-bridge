@@ -1,0 +1,11 @@
+{
+  "id": "downgraded-stored-xss-001",
+  "platform": "hackerone",
+  "outcome": "downgraded",
+  "vuln_class": "stored-xss",
+  "phrase": "The issue may allow full admin takeover because stored content appears to render somewhere in the workflow.",
+  "wording_bucket": "too_strong",
+  "notes": [
+    "Downgraded-style example that overclaims without a privileged viewer artifact."
+  ]
+}

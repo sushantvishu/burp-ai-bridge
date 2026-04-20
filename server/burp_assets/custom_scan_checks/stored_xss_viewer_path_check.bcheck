@@ -1,0 +1,17 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge Stored XSS Viewer Path Check"
+    description: "Passive candidate check that separates likely storage-path requests from the later viewer-path proof."
+    author: "AI Bridge"
+    tags: "passive", "xss", "stored-xss", "workflow"
+
+given request then
+    if ({base.request.method} matches "(POST|PUT|PATCH)") and
+       ({base.request.url.path} matches "(?i)(comment|message|note|post|ticket|feedback|profile|review)") and
+       ({base.request.body} matches "(?i)(comment|message|content|description|bio|title|body)") and
+       ({base.response.status_code} matches "(200|201|202|204|302|303)\\b") then
+        report issue:
+            severity: info
+            confidence: tentative
+            detail: "Candidate storage path detected. Pair this request with one shared or privileged viewer request and keep the render proof separate from the storage proof."
+            remediation: "Encode or sanitize stored content for the correct output context and review the viewer path that renders it."

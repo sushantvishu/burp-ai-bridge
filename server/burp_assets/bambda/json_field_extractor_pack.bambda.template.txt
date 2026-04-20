@@ -1,0 +1,25 @@
+Production-oriented Bambda starter: JSON Field Extractor Pack
+
+Goal:
+- extract workflow-significant JSON fields without manually scanning large bodies
+- distinguish user-controlled fields from likely server-managed fields
+- make mass-assignment and business-logic candidates obvious
+
+Seed field names:
+- role, roles, permission, permissions, tenantId, ownerId
+- status, approved, approval, price, total, discount, credit, balance, limit
+- inventory, stock, quantity, quota, tier
+
+Suggested tags:
+- server-managed-field
+- pricing-field
+- approval-field
+- ownership-field
+
+Pair with MCP context:
+- request highlights
+- response diff scoring
+- review dataset examples for the same target partition
+
+Stop when:
+- one field mutation target is selected for one bounded follow-up request

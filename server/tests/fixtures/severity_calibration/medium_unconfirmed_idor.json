@@ -1,0 +1,26 @@
+{
+  "payload": {
+    "raw_request": "GET /api/users/42 HTTP/1.1",
+    "target_url": "https://example.com/api/users/42"
+  },
+  "validation": {
+    "validation_status": "needs-confirmation",
+    "hypothesis": {
+      "vuln_class": "idor"
+    },
+    "evidence_score": 1.8
+  },
+  "impact": {
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "high-impact",
+    "confirmation_state": "needs-confirmation",
+    "dashboard_issue": {
+      "severity": "high"
+    },
+    "evidence_score": 1.8
+  },
+  "expected": {
+    "severity": "medium"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "xss_fallback",
+  "payload": {
+    "raw_request": "POST /notes/preview HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nnote=%3Csvg%20onload%3Dalert(1)%3E",
+    "target_url": "https://example.com/notes/preview",
+    "http_method": "POST",
+    "source_tool": "repeater",
+    "burp_dashboard_issue": {
+      "name": "Cross-site scripting",
+      "severity": "medium",
+      "confidence": "tentative",
+      "detail": "Preview flow reflects note content."
+    }
+  },
+  "advisory": {
+    "analysis": "The preview flow reflects user content, but the provider path fell back to deterministic guidance.",
+    "analysis_backend": "mcp+deterministic",
+    "fallback_used": true,
+    "primary_next_action": "Confirm the rendering context with one benign proof.",
+    "questions_for_user": [
+      "Which rendering context reaches a privileged user?"
+    ],
+    "confirmation_playbooks": [
+      "Capture one benign proof in the rendered sink."
+    ],
+    "impact_paths": [
+      "Trigger a privileged stored XSS in the admin moderation queue."
+    ],
+    "potential_vulnerabilities": [
+      "[xss] reflected note preview"
+    ],
+    "burp_action_checklist": [
+      "Send the preview request to Repeater.",
+      "Test one benign payload in the reflected sink."
+    ],
+    "request_plan": [
+      "baseline",
+      "benign sink proof"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "xss",
+        "summary": "[xss] reflected note preview",
+        "confidence": 0.74,
+        "status": "suspected",
+        "impact_paths": [
+          "Trigger a privileged stored XSS in the admin moderation queue."
+        ],
+        "next_checks": [
+          "Record one benign rendering-context proof."
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "source": "rule-engine",
+        "evidence_type": "derived",
+        "summary": "Preview content reflects a controllable value",
+        "confidence": 0.61
+      },
+      {
+        "source": "local-kb",
+        "evidence_type": "knowledge-base",
+        "summary": "Previous note-preview sinks required context confirmation",
+        "confidence": 0.52
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "needs-confirmation",
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "high-impact",
+    "safe_to_expand": false
+  }
+}

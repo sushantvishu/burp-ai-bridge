@@ -1,0 +1,11 @@
+{
+  "id": "duplicate-na-001",
+  "platform": "generic",
+  "outcome": "duplicate-na",
+  "vuln_class": "business-logic",
+  "phrase": "The workflow behaves unexpectedly and could impact business rules.",
+  "wording_bucket": "too_vague",
+  "notes": [
+    "Duplicate/NA-style example that is too vague about the rule, outcome, and trust boundary."
+  ]
+}

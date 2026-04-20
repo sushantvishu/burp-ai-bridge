@@ -1,0 +1,76 @@
+{
+  "version": "2026-04-06",
+  "packs": [
+    {
+      "id": "strix_methodology_pack",
+      "name": "Strix-inspired methodology pack",
+      "style": "methodology",
+      "origin": "conceptual-from-usestrix/strix",
+      "license_note": "Reimplemented locally from high-level ideas only.",
+      "summary": "Evidence-first methodology for Burp-driven triage with strong baseline control, bounded comparisons, and report-grade capture discipline.",
+      "applies_to": [
+        "general",
+        "idor",
+        "access-control",
+        "authentication",
+        "business-logic",
+        "csrf",
+        "graphql",
+        "mass-assignment",
+        "race-condition",
+        "session-management",
+        "ssrf",
+        "xss",
+        "xxe",
+        "sqli",
+        "ssti",
+        "path-traversal",
+        "open-redirect",
+        "file-upload"
+      ],
+      "global_guidance": {
+        "baseline_confirmation": [
+          "Keep one untouched baseline request and one clearly named comparison request before widening the search.",
+          "Prefer one variable change at a time and treat status, headers, length, and visible body deltas as separate evidence points."
+        ],
+        "evidence_priorities": [
+          "Prioritize role-separated diffs, object-boundary changes, and proof that a server-side control changed, not only client-visible variation.",
+          "Capture the exact request pair, exact response pair, and one short analyst note on why the delta matters."
+        ],
+        "reporting_focus": [
+          "Write evidence as a chain: baseline -> changed request -> server-side effect -> business impact candidate.",
+          "Do not claim a severity promotion until the evidence shows either boundary failure, durable state change, or sensitive data access."
+        ],
+        "stop_conditions": [
+          "Stop widening the test when the current delta is still ambiguous or not yet repeatable.",
+          "Do not broaden to more payloads until one high-signal comparison is documented cleanly."
+        ]
+      },
+      "class_overrides": {
+        "idor": {
+          "workflow_focus": [
+            "Anchor the issue to one object boundary first, then compare a second tenant or role-owned object of the same type.",
+            "If Burp Scanner already marked a second issue on the same flow, use it only when the same object transition explains both findings."
+          ]
+        },
+        "xss": {
+          "workflow_focus": [
+            "Treat the reflection context as the first proof target: HTML body, attribute, script, JSON, or template render.",
+            "Only upgrade once you know who can trigger and who can observe the rendered payload."
+          ]
+        },
+        "xxe": {
+          "workflow_focus": [
+            "Treat XXE as an entity and parser workflow: parser acceptance first, entity handling second, side effect third."
+          ]
+        },
+        "ssrf": {
+          "workflow_focus": [
+            "Treat parser behavior, URL normalization, and callback evidence as three separate questions; answer them one at a time.",
+            "Keep outbound-fetch hypotheses tied to pasted Burp or Collaborator evidence only."
+          ]
+        }
+      }
+    }
+  ]
+}

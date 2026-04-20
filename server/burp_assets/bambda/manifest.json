@@ -1,0 +1,56 @@
+{
+  "manifest_version": "2026-04-10",
+  "maturity": "production-oriented-starter",
+  "packs": [
+    {
+      "id": "object-identifier-markers",
+      "name": "Object Identifier Marker Pack",
+      "path": "object_identifier_markers.bambda.template.txt",
+      "applies_to": ["idor", "bola", "api-bola", "mass-assignment"],
+      "purpose": "Highlight likely object identifiers, owner fields, and tenant boundaries before bounded role-separated testing.",
+      "best_when": "The request family already has likely object references or MCP highlights on path, query, or JSON fields.",
+      "output_focus": "object ids, owner fields, tenant fields, UUIDs, numeric identifiers",
+      "recommended_burp_feature": "Logger or Repeater editor tagging"
+    },
+    {
+      "id": "reflection-marker-pack",
+      "name": "Reflection Marker Pack",
+      "path": "reflection_marker_pack.bambda.template.txt",
+      "applies_to": ["xss", "stored-xss"],
+      "purpose": "Tag reflected markers, render sinks, and storage/viewer separation without broad active payload use.",
+      "best_when": "The bridge or scanner already marked a possible reflection or storage sink.",
+      "output_focus": "reflected marker positions, render sink hints, storage/viewer labels",
+      "recommended_burp_feature": "Response viewer tagging"
+    },
+    {
+      "id": "role-session-delta-pack",
+      "name": "Role / Session Delta Pack",
+      "path": "role_session_delta_pack.bambda.template.txt",
+      "applies_to": ["idor", "authentication", "auth-bypass", "csrf"],
+      "purpose": "Flag cookies, auth headers, CSRF controls, and role indicators so manual comparisons stay clean.",
+      "best_when": "The workflow needs lower-privilege, logged-out, or cross-role comparison on one request family.",
+      "output_focus": "cookie changes, auth header changes, token changes, role indicators",
+      "recommended_burp_feature": "Logger diff or Repeater side-by-side view"
+    },
+    {
+      "id": "issue-chain-pack",
+      "name": "Issue Chain Surfacing Pack",
+      "path": "issue_chain_pack.bambda.template.txt",
+      "applies_to": ["idor", "stored-xss", "ssrf", "business-logic"],
+      "purpose": "Surface nearby scanner issues and sibling request families that belong to the same bounded escalation chain.",
+      "best_when": "MCP shows multiple Burp issues on one host, endpoint family, or workflow path.",
+      "output_focus": "issue ids, shared paths, shared identifiers, candidate chain markers",
+      "recommended_burp_feature": "Dashboard plus history filtering"
+    },
+    {
+      "id": "json-field-extractor-pack",
+      "name": "JSON Field Extractor Pack",
+      "path": "json_field_extractor_pack.bambda.template.txt",
+      "applies_to": ["mass-assignment", "api-bopla", "business-logic"],
+      "purpose": "Extract workflow-significant JSON fields and distinguish server-managed values from user-controlled inputs.",
+      "best_when": "API requests or responses already expose ownership, role, price, approval, or state fields.",
+      "output_focus": "ownership fields, role fields, pricing fields, approval/state fields",
+      "recommended_burp_feature": "Logger response extraction"
+    }
+  ]
+}

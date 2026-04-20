@@ -1,0 +1,25 @@
+Production-oriented Bambda starter: Role / Session Delta Pack
+
+Goal:
+- keep auth and role deltas obvious while comparing the same route family
+- separate lower-privilege, logged-out, and post-logout requests cleanly
+- flag CSRF-related controls on state-changing requests
+
+Mark these fields:
+- Cookie, Authorization, X-CSRF-Token, X-XSRF-Token
+- Set-Cookie, Location, Cache-Control
+- role, roles, admin, tenant, owner, permission, session, csrf
+
+Suggested tags:
+- session-boundary
+- role-delta
+- csrf-control
+- post-logout-check
+
+Pair with MCP context:
+- logger deltas
+- proxy history
+- scanner issue id
+
+Stop when:
+- one clean baseline and one meaningful auth or session delta are captured

@@ -1,0 +1,11 @@
+{
+  "id": "accepted-idor-001",
+  "platform": "bugcrowd",
+  "outcome": "accepted",
+  "vuln_class": "idor",
+  "phrase": "The same endpoint exposes another tenant's invoice object with a clean role-separated 403/200 diff.",
+  "wording_bucket": "just_right",
+  "notes": [
+    "Accepted-style example that ties the finding to one clear object boundary and one reproducible artifact."
+  ]
+}

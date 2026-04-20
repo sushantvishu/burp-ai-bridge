@@ -1,0 +1,11 @@
+{
+  "id": "accepted-mass-assignment-001",
+  "platform": "bugcrowd",
+  "outcome": "accepted",
+  "vuln_class": "mass-assignment",
+  "phrase": "The API accepts a server-managed approval field from the client and persists the unauthorized state change beyond the baseline workflow.",
+  "wording_bucket": "just_right",
+  "notes": [
+    "Accepted-style example that explains the server-managed field, the persistence of the change, and the workflow impact."
+  ]
+}

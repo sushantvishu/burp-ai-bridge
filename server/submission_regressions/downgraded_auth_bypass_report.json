@@ -1,0 +1,11 @@
+{
+  "id": "downgraded-auth-bypass-001",
+  "platform": "hackerone",
+  "outcome": "downgraded",
+  "vuln_class": "auth-bypass",
+  "phrase": "The route appears reachable without the intended login control and may expose broader administrative functionality.",
+  "wording_bucket": "too_strong",
+  "notes": [
+    "Downgraded-style example that overclaims wider administrative reach without one concrete privileged action or object proof."
+  ]
+}

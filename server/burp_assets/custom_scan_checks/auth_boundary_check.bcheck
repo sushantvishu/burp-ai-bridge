@@ -1,0 +1,15 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge Auth Boundary Check"
+    description: "Passive candidate check for privileged or role-sensitive route families that need lower-privilege comparison."
+    author: "AI Bridge"
+    tags: "passive", "authentication", "auth-bypass", "authorization"
+
+given request then
+    if ({base.request.url.path} matches "(?i)(admin|internal|manage|moderate|export|report|support|staff|backoffice)") and
+       ({base.request.headers} matches "(?i)(Cookie:|Authorization:)") then
+        report issue:
+            severity: info
+            confidence: tentative
+            detail: "Candidate privileged route detected. Compare the same request with a lower-privilege session, logged-out state, and post-logout state before claiming authentication or authorization bypass."
+            remediation: "Enforce authentication and role checks on every privileged route and invalidate sessions consistently."

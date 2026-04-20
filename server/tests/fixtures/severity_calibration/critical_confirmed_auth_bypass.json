@@ -1,0 +1,26 @@
+{
+  "payload": {
+    "raw_request": "GET /admin HTTP/1.1",
+    "target_url": "https://example.com/admin"
+  },
+  "validation": {
+    "validation_status": "confirmed",
+    "hypothesis": {
+      "vuln_class": "authentication"
+    },
+    "evidence_score": 3.6
+  },
+  "impact": {
+    "reportable": true,
+    "reportability": "high",
+    "business_impact_class": "high-impact",
+    "confirmation_state": "confirmed",
+    "dashboard_issue": {
+      "severity": "critical"
+    },
+    "evidence_score": 3.6
+  },
+  "expected": {
+    "severity": "critical"
+  }
+}

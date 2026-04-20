@@ -1,0 +1,99 @@
+[
+  {
+    "id": "sqli_review",
+    "vuln_class": "sqli",
+    "title": "SQL Injection Review",
+    "severity": "high",
+    "summary": "Parameter-driven input and backend-style error behavior suggest reviewing this flow for SQL or query-language injection patterns.",
+    "any_of": ["request_has_identifier_params", "request_has_search_like_params", "response_has_error_keywords"],
+    "param_names_any": ["id", "user", "account", "search", "query", "sort", "order", "filter"],
+    "nuclei_tags": ["sqli", "error-based", "blind"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/SQLi/Generic-SQLi.txt",
+    "operator_questions": [
+      "Do quote, boolean, or time-based variations change status, length, timing, or backend error behavior?",
+      "Does the same endpoint accept the same parameter names in query, form, or JSON bodies?"
+    ],
+    "source_refs": [
+      "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "https://github.com/EdOverflow/bugbounty-cheatsheet/tree/master/cheatsheets"
+    ]
+  },
+  {
+    "id": "command_injection_review",
+    "vuln_class": "command-injection",
+    "title": "Command Injection Review",
+    "severity": "high",
+    "summary": "User-controlled input reaching backend system functionality should be reviewed for shell or command execution edge cases.",
+    "any_of": ["request_has_search_like_params", "request_has_url_input_params", "response_has_error_keywords"],
+    "path_keywords_any": ["ping", "exec", "run", "health", "diag", "import"],
+    "nuclei_tags": ["cmdi", "rce", "injection"],
+    "seclists_path": "/usr/share/seclists/Fuzzing/command-injection-commix.txt",
+    "operator_questions": [
+      "Do shell metacharacters, separators, or time-based payloads alter timing, output, or error behavior?",
+      "Is this endpoint expected to call OS commands, network tools, archive utilities, or image processors?"
+    ],
+    "source_refs": [
+      "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "https://github.com/m14r41/PentestingEverything"
+    ]
+  },
+  {
+    "id": "jwt_auth_token_review",
+    "vuln_class": "jwt-token",
+    "title": "JWT / Auth Token Misuse Review",
+    "severity": "high",
+    "summary": "Bearer-style authorization should be reviewed for token audience, role scoping, trust boundaries, and acceptance of malformed or downgraded tokens.",
+    "all_of": ["request_has_authorization"],
+    "any_of": ["request_has_bearer_token", "request_has_jwt_like_token"],
+    "request_content_types_any": ["application/json", "application/x-www-form-urlencoded", ""],
+    "nuclei_tags": ["jwt", "auth-bypass", "token"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/api/api-endpoints-res.txt",
+    "operator_questions": [
+      "Is the Authorization header a JWT, opaque bearer token, or API key, and does the server enforce audience and role claims?",
+      "Do lower-privilege or expired tokens still reach the same object IDs or admin paths?"
+    ],
+    "source_refs": [
+      "https://owasp.org/Top10/2025/",
+      "https://github.com/m14r41/PentestingEverything"
+    ]
+  },
+  {
+    "id": "cache_behavior_review",
+    "vuln_class": "cache",
+    "title": "Cache Poisoning / Cache Deception Review",
+    "severity": "medium",
+    "summary": "Authentication or personalized content should be reviewed for browser and intermediary cache behavior, especially on GET endpoints.",
+    "methods_any": ["GET"],
+    "all_of": ["response_missing_cache_headers"],
+    "any_of": ["request_has_cookies", "request_has_authorization", "response_has_html"],
+    "nuclei_tags": ["cache", "misconfig", "deception"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Does this response contain user-specific data but lack strict cache-control or vary protections?",
+      "Can path suffixes, extensions, or header variations cause authenticated content to be cached or served broadly?"
+    ],
+    "source_refs": [
+      "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "https://owasp.org/Top10/2025/"
+    ]
+  },
+  {
+    "id": "business_logic_review",
+    "vuln_class": "business-logic",
+    "title": "Business Logic / Workflow Abuse Review",
+    "severity": "high",
+    "summary": "Stateful workflows, numeric actions, or repeated-use operations should be reviewed for sequencing, replay, quantity, and integrity assumptions.",
+    "any_of": ["request_has_identifier_params", "request_has_form_body", "request_has_json_body"],
+    "path_keywords_any": ["checkout", "cart", "apply", "redeem", "coupon", "transfer", "approve", "reset", "verify"],
+    "nuclei_tags": ["logic", "workflow", "auth-bypass"],
+    "seclists_path": "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "operator_questions": [
+      "Can the workflow be replayed, skipped, repeated, or reordered without server-side enforcement?",
+      "Are quantity, price, state, or approval fields trusted from the client side?"
+    ],
+    "source_refs": [
+      "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "https://owasp.org/Top10/2025/"
+    ]
+  }
+]

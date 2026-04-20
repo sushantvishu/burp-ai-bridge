@@ -1,0 +1,25 @@
+Production-oriented Bambda starter: Reflection Marker Pack
+
+Goal:
+- tag reflected or rendered markers without broad payload churn
+- separate storage-path evidence from viewer-path evidence
+- make likely sink contexts visible in HTML, JSON, and script blocks
+
+Seed markers:
+- operator marker strings such as bridge-benign-render-marker
+- HTML sink hints: <script, onerror=, onclick=, href=, src=, innerHTML
+- JSON reflection hints: "message", "content", "body", "description"
+
+Suggested tags:
+- reflection-candidate
+- storage-path
+- viewer-path
+- privileged-render
+
+Pair with MCP context:
+- scanner highlights
+- related viewer-path issues
+- selected request/response offsets
+
+Stop when:
+- one render path is tied to one stored marker with exact request lineage

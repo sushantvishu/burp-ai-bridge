@@ -1,0 +1,11 @@
+{
+  "id": "downgraded-csrf-001",
+  "platform": "bugcrowd",
+  "outcome": "downgraded",
+  "vuln_class": "csrf",
+  "phrase": "The request appears forgeable and could potentially affect account integrity in a meaningful way.",
+  "wording_bucket": "too_vague",
+  "notes": [
+    "Downgraded-style example that fails to name the actual state-changing action and therefore overstates the impact."
+  ]
+}

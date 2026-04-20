@@ -1,0 +1,33 @@
+{
+  "payload": {
+    "raw_request": "POST /comments HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\ncomment=hello",
+    "raw_response": "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 42\r\n\r\n<html><body>Queued for review</body></html>",
+    "target_url": "https://example.com/comments",
+    "repeater_variant_observations": [
+      {
+        "tab_name": "variant-1",
+        "summary": "Benign marker in admin queue",
+        "request_text": "POST /comments HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\ncomment=<benign-shared-view-marker>",
+        "response_text": "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 92\r\n\r\n<html><body>Admin queue preview: <benign-shared-view-marker></body></html>"
+      }
+    ]
+  },
+  "plan": {
+    "scanner_focus": {
+      "highlights": [
+        {"text": "<benign-shared-view-marker>"}
+      ]
+    },
+    "repeater_variant_requests": [
+      {
+        "name": "variant-1",
+        "expected_signal": "The same sink is visible in a stronger trust boundary."
+      }
+    ]
+  },
+  "expected": {
+    "best_tab": "variant-1",
+    "min_score": 1.5,
+    "high_signal": false
+  }
+}

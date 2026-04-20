@@ -1,0 +1,15 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge Business Logic Invariant Check"
+    description: "Passive candidate check for workflows that expose pricing, quota, approval, or stock invariants."
+    author: "AI Bridge"
+    tags: "passive", "business-logic", "workflow"
+
+given request then
+    if ({base.request} matches "(?i)(price|amount|total|discount|coupon|credit|balance|quantity|stock|inventory|approval|limit|quota)") and
+       ({base.response.status_code} matches "(200|201|202|204|302|303)\\b") then
+        report issue:
+            severity: info
+            confidence: tentative
+            detail: "Workflow-sensitive invariants were detected in the request family. Keep one invariant explicit and compare one bounded outcome change at a time."
+            remediation: "Enforce business rules server side and validate pricing, quota, approval, and stock invariants independently of client input."

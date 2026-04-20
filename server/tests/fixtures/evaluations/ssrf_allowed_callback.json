@@ -1,0 +1,82 @@
+{
+  "name": "ssrf_allowed_callback",
+  "payload": {
+    "raw_request": "POST /api/report/preview HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/json\r\n\r\n{\"url\":\"https://collab.example/ping\"}",
+    "target_url": "https://example.com/api/report/preview",
+    "http_method": "POST",
+    "source_tool": "proxy",
+    "program_policy_text": "Collaborator allowed. SSRF allowed for one approved callback only.",
+    "burp_dashboard_issue": {
+      "name": "Server-side request forgery",
+      "severity": "medium",
+      "confidence": "tentative",
+      "detail": "Report preview fetches attacker-supplied URLs."
+    }
+  },
+  "advisory": {
+    "analysis": "The preview workflow appears to fetch remote content server-side.",
+    "analysis_backend": "ollama",
+    "fallback_used": false,
+    "primary_next_action": "Confirm one benign outbound callback to an approved domain before claiming internal reach.",
+    "questions_for_user": [
+      "Can you prove one benign outbound callback to an approved domain?"
+    ],
+    "confirmation_playbooks": [
+      "Confirm one approved external callback before claiming internal reach."
+    ],
+    "impact_paths": [
+      "Server-side fetch to attacker-controlled URL in report preview workflow."
+    ],
+    "potential_vulnerabilities": [
+      "[ssrf] report preview fetches attacker-controlled URLs"
+    ],
+    "burp_action_checklist": [
+      "Send the preview request to Repeater.",
+      "Test one approved collaborator endpoint."
+    ],
+    "request_plan": [
+      "baseline",
+      "approved callback"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "ssrf",
+        "summary": "[ssrf] report preview fetches attacker-controlled URLs",
+        "confidence": 0.66,
+        "status": "suspected",
+        "impact_paths": [
+          "Server-side fetch to attacker-controlled URL in report preview workflow."
+        ],
+        "next_checks": [
+          "Use one approved callback endpoint."
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "source": "collaborator",
+        "evidence_type": "callback",
+        "summary": "One approved external callback was observed",
+        "confidence": 0.78
+      },
+      {
+        "source": "project-config",
+        "evidence_type": "config",
+        "summary": "Collaborator testing is allowed by project policy",
+        "confidence": 0.52
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "needs-confirmation",
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "security-impact",
+    "safe_to_expand": true,
+    "policy_gate_applies": true,
+    "policy_gate_allowed": true
+  }
+}

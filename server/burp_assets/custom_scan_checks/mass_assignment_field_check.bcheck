@@ -1,0 +1,16 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge Mass Assignment Field Check"
+    description: "Passive candidate check for JSON requests that already expose server-managed or privilege-significant fields."
+    author: "AI Bridge"
+    tags: "passive", "mass-assignment", "api", "json"
+
+given request then
+    if ({base.request.headers} matches "(?i)Content-Type:\\s*application/json") and
+       ({base.request.body} matches "(?i)(isAdmin|role|roles|permission|permissions|tenantId|ownerId|status|approved|approval|discount|price|credit|balance|limit)") and
+       ({base.response.status_code} matches "(200|201|202|204)\\b") then
+        report issue:
+            severity: info
+            confidence: firm
+            detail: "Workflow-significant JSON fields were accepted on a successful request. Test one bounded extra-field mutation and confirm whether the server honors or persists a client-controlled server-managed field."
+            remediation: "Use explicit allowlists for bindable fields and ignore or reject server-managed fields from client input."

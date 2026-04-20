@@ -1,0 +1,79 @@
+{
+  "name": "auth_bypass_admin_api",
+  "payload": {
+    "raw_request": "GET /api/admin/users HTTP/1.1\r\nHost: example.com\r\n\r\n",
+    "target_url": "https://example.com/api/admin/users",
+    "http_method": "GET",
+    "source_tool": "repeater",
+    "burp_dashboard_issue": {
+      "name": "Authentication bypass",
+      "severity": "high",
+      "confidence": "firm",
+      "detail": "Administrative data is reachable without authentication."
+    }
+  },
+  "advisory": {
+    "analysis": "Administrative API data appears reachable without a login boundary.",
+    "analysis_backend": "mcp",
+    "fallback_used": false,
+    "primary_next_action": "Capture one unauthenticated baseline and one authenticated comparison before broadening the claim.",
+    "questions_for_user": [],
+    "confirmation_playbooks": [
+      "Record the same administrative response with and without authentication."
+    ],
+    "impact_paths": [
+      "Administrative user data is reachable without authentication."
+    ],
+    "potential_vulnerabilities": [
+      "[authentication] admin API reachable without login"
+    ],
+    "burp_action_checklist": [
+      "Replay the unauthenticated baseline.",
+      "Replay the authenticated comparison."
+    ],
+    "request_plan": [
+      "unauthenticated baseline",
+      "authenticated comparison"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "authentication",
+        "summary": "[authentication] admin API reachable without login",
+        "confidence": 0.9,
+        "status": "confirmed"
+      }
+    ],
+    "evidence": [
+      {
+        "source": "proxy",
+        "evidence_type": "traffic-history",
+        "summary": "Unauthenticated request returned 200",
+        "confidence": 0.75
+      },
+      {
+        "source": "repeater",
+        "evidence_type": "manual-diff",
+        "summary": "Authenticated and unauthenticated responses expose the same admin dataset",
+        "confidence": 0.84
+      },
+      {
+        "source": "burp-dashboard",
+        "evidence_type": "scanner",
+        "summary": "Scanner flagged a missing authentication boundary",
+        "confidence": 0.73
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "confirmed",
+    "reportable": true,
+    "reportability": "high",
+    "business_impact_class": "security-impact",
+    "safe_to_expand": true,
+    "policy_gate_applies": false,
+    "policy_gate_allowed": true
+  }
+}

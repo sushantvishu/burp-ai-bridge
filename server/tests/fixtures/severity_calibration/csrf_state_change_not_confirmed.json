@@ -1,0 +1,34 @@
+{
+  "payload": {
+    "raw_request": "POST /profile HTTP/1.1",
+    "target_url": "https://example.com/profile"
+  },
+  "validation": {
+    "validation_status": "needs-confirmation",
+    "hypothesis": {
+      "vuln_class": "csrf"
+    },
+    "evidence_score": 1.8,
+    "evidence_count": 1,
+    "missing_evidence": [
+      "Need one state-changing browser-path confirmation."
+    ]
+  },
+  "impact": {
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "security-impact",
+    "confirmation_state": "needs-confirmation",
+    "dashboard_issue": {
+      "severity": "medium"
+    },
+    "evidence_score": 1.8,
+    "evidence_count": 1,
+    "evidence_gaps": [
+      "Need one state-changing browser-path confirmation."
+    ]
+  },
+  "expected": {
+    "severity": "medium"
+  }
+}

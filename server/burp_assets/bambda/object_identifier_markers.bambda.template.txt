@@ -1,0 +1,25 @@
+Production-oriented Bambda starter: Object Identifier Marker Pack
+
+Goal:
+- mark likely object identifiers before role-separated testing
+- make tenant and owner fields visually obvious in Logger or Repeater
+- keep the operator focused on one object family at a time
+
+Seed regexes:
+- (?i)\b(user|account|tenant|owner|org|organization|invoice|order|project|member|profile)(Id|ID)?\b
+- (?i)\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b
+- (?i)(/users/|/accounts/|/tenants/|/projects/|/orders/|/invoices/)\d+
+
+Suggested tags:
+- object-id
+- tenant-boundary
+- owner-field
+- scanner-highlight-overlap
+
+Pair with MCP context:
+- burp_dashboard_issue.highlights
+- burp_related_scanner_issues
+- proxy_history_entries
+
+Stop when:
+- one exact object reference is isolated for baseline vs comparison testing

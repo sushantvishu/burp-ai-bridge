@@ -1,0 +1,75 @@
+{
+  "name": "csrf_profile_change",
+  "payload": {
+    "raw_request": "POST /account/email HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nemail=test%40example.com",
+    "target_url": "https://example.com/account/email",
+    "http_method": "POST",
+    "source_tool": "proxy",
+    "burp_dashboard_issue": {
+      "name": "Cross-site request forgery",
+      "severity": "medium",
+      "confidence": "firm",
+      "detail": "Profile email update lacks anti-CSRF protection."
+    }
+  },
+  "advisory": {
+    "analysis": "The account email change workflow appears to be missing a request-origin protection control.",
+    "analysis_backend": "ollama",
+    "fallback_used": false,
+    "primary_next_action": "Confirm one low-risk state change with a benign email update on a test account.",
+    "questions_for_user": [
+      "Which other state-changing workflows reuse the same missing control?"
+    ],
+    "confirmation_playbooks": [
+      "Capture one same-session baseline and one forged variant on a test account."
+    ],
+    "impact_paths": [
+      "Account profile changes can be triggered without anti-CSRF protection."
+    ],
+    "potential_vulnerabilities": [
+      "[csrf] profile email change without token"
+    ],
+    "burp_action_checklist": [
+      "Baseline the profile update flow.",
+      "Confirm one benign forged request."
+    ],
+    "request_plan": [
+      "baseline",
+      "forged variant"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "csrf",
+        "summary": "[csrf] profile email change without token",
+        "confidence": 0.71,
+        "status": "suspected"
+      }
+    ],
+    "evidence": [
+      {
+        "source": "proxy",
+        "evidence_type": "traffic-history",
+        "summary": "Observed state-changing request without a CSRF token",
+        "confidence": 0.68
+      },
+      {
+        "source": "repeater",
+        "evidence_type": "manual-diff",
+        "summary": "The same request succeeds without an origin-bound control",
+        "confidence": 0.76
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "needs-confirmation",
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "security-impact",
+    "safe_to_expand": true,
+    "policy_gate_applies": false,
+    "policy_gate_allowed": true
+  }
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "vuln_class": "idor",
+    "required_styles": ["methodology", "validation-impact", "workflow-payload", "references"],
+    "required_terms": ["object boundary", "reportable", "variant", "portswigger.net"]
+  },
+  {
+    "vuln_class": "ssrf",
+    "required_styles": ["methodology", "validation-impact", "workflow-payload", "references"],
+    "required_terms": ["parser behavior", "outbound", "absolute URL", "github.com/PortSwigger/BChecks"]
+  },
+  {
+    "vuln_class": "stored-xss",
+    "required_styles": ["validation-impact", "workflow-payload", "references"],
+    "required_terms": ["viewer", "render", "storage", "portswigger.net/web-security/cross-site-scripting/stored"]
+  },
+  {
+    "vuln_class": "authentication",
+    "required_styles": ["methodology", "workflow-payload", "references"],
+    "required_terms": ["logout", "lower-privilege token"]
+  },
+  {
+    "vuln_class": "csrf",
+    "required_styles": ["methodology", "validation-impact", "workflow-payload", "references"],
+    "required_terms": ["token", "origin", "reportable"]
+  },
+  {
+    "vuln_class": "sqli",
+    "required_styles": ["methodology", "validation-impact", "workflow-payload", "references"],
+    "required_terms": ["baseline", "reportable", "variant"]
+  },
+  {
+    "vuln_class": "xxe",
+    "required_styles": ["methodology", "validation-impact", "references"],
+    "required_terms": ["entity", "parser", "portswigger.net/web-security/xxe"]
+  },
+  {
+    "vuln_class": "http-request-smuggling",
+    "required_styles": ["validation-impact", "references"],
+    "required_terms": ["desynchronization", "queue poisoning"]
+  },
+  {
+    "vuln_class": "mass-assignment",
+    "required_styles": ["methodology", "validation-impact", "workflow-payload", "references"],
+    "required_terms": ["server-managed field", "role", "state-change"]
+  },
+  {
+    "vuln_class": "api-bola",
+    "required_styles": ["validation-impact", "workflow-payload", "references"],
+    "required_terms": ["reportable", "variant"]
+  },
+  {
+    "vuln_class": "api-bfl",
+    "required_styles": ["validation-impact", "workflow-payload", "references"],
+    "required_terms": ["reportable", "workflow"]
+  },
+  {
+    "vuln_class": "api-bopla",
+    "required_styles": ["references"],
+    "required_terms": ["github.com", "portswigger.net"]
+  },
+  {
+    "vuln_class": "api-unsafe-consumption",
+    "required_styles": ["workflow-payload", "references"],
+    "required_terms": ["workflow", "github.com"]
+  }
+]

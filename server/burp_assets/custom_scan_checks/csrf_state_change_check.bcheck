@@ -1,0 +1,17 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge CSRF State Change Check"
+    description: "Passive candidate check for low-risk state-changing requests that appear to lack obvious anti-CSRF markers."
+    author: "AI Bridge"
+    tags: "passive", "csrf", "state-change"
+
+given request then
+    if ({base.request.method} matches "(POST|PUT|PATCH|DELETE)") and
+       ({base.response.status_code} matches "(200|201|202|204|302|303)\\b") and
+       not ({base.request.headers} matches "(?i)(X-CSRF|X-XSRF|Origin:|Referer:)") and
+       not ({base.request.body} matches "(?i)(csrf|xsrf|authenticity_token)") then
+        report issue:
+            severity: info
+            confidence: tentative
+            detail: "Possible state-changing request without obvious anti-CSRF markers. Verify one low-risk state change with and without the expected origin or token controls."
+            remediation: "Require anti-CSRF protections on state-changing requests and validate the user session and origin context server side."

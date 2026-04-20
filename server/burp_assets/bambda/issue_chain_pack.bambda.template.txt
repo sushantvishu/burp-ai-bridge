@@ -1,0 +1,25 @@
+Production-oriented Bambda starter: Issue Chain Surfacing Pack
+
+Goal:
+- surface only bounded issue chains that belong to the same host and workflow
+- connect scanner-marked siblings by shared ids, sinks, or callback destinations
+- avoid noisy cross-host or cross-workflow chaining
+
+Chain hints:
+- same issue id family or same MCP-selected host
+- shared object ids, comment fields, callback parameters, or tenant fields
+- same path prefix or same workflow noun set
+
+Suggested tags:
+- same-workflow
+- same-object-family
+- viewer-follow-up
+- callback-follow-up
+
+Pair with MCP context:
+- burp_related_scanner_issues
+- panel-state workflow
+- snapshot evidence bundle
+
+Stop when:
+- one bounded escalation chain is clear enough for the next manual step

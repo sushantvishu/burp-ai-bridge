@@ -1,0 +1,78 @@
+{
+  "name": "stored_xss_admin_queue",
+  "payload": {
+    "raw_request": "POST /comments HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\ncomment=hello",
+    "target_url": "https://example.com/comments",
+    "http_method": "POST",
+    "source_tool": "repeater",
+    "burp_dashboard_issue": {
+      "name": "Stored cross-site scripting",
+      "severity": "high",
+      "confidence": "firm",
+      "detail": "Submitted comments appear in an administrative moderation queue."
+    }
+  },
+  "advisory": {
+    "analysis": "Comment content appears to persist into an administrative moderation workflow.",
+    "analysis_backend": "mcp",
+    "fallback_used": false,
+    "primary_next_action": "Confirm the exact rendering context with one benign stored proof in the moderation view.",
+    "questions_for_user": [
+      "Which privileged workflow renders the stored comment?"
+    ],
+    "confirmation_playbooks": [
+      "Capture one benign stored rendering proof in the moderation queue."
+    ],
+    "impact_paths": [
+      "Stored content reaches an administrative moderation queue."
+    ],
+    "potential_vulnerabilities": [
+      "[xss] stored comment rendered in admin moderation"
+    ],
+    "burp_action_checklist": [
+      "Submit one benign comment.",
+      "Review the moderation queue rendering context."
+    ],
+    "request_plan": [
+      "baseline",
+      "stored proof"
+    ]
+  },
+  "run": {
+    "hypotheses": [
+      {
+        "id": "hyp-1",
+        "vuln_class": "xss",
+        "summary": "[xss] stored comment rendered in admin moderation",
+        "confidence": 0.84,
+        "status": "suspected",
+        "impact_paths": [
+          "Stored content reaches an administrative moderation queue."
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "source": "proxy",
+        "evidence_type": "traffic-history",
+        "summary": "Comment submission was accepted and persisted",
+        "confidence": 0.7
+      },
+      {
+        "source": "logger",
+        "evidence_type": "manual-diff",
+        "summary": "Moderation view reflects stored comment markup",
+        "confidence": 0.78
+      }
+    ]
+  },
+  "expected": {
+    "validation_status": "needs-confirmation",
+    "reportable": false,
+    "reportability": "medium",
+    "business_impact_class": "security-impact",
+    "safe_to_expand": true,
+    "policy_gate_applies": false,
+    "policy_gate_allowed": true
+  }
+}

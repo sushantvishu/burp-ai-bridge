@@ -1,0 +1,97 @@
+{
+  "manifest_version": "2026-04-10",
+  "maturity": "production-oriented-starter",
+  "packs": [
+    {
+      "id": "idor-bola-check",
+      "name": "IDOR / BOLA Boundary Check",
+      "path": "idor_bola_boundary_check.bcheck",
+      "applies_to": ["idor", "bola", "api-bola"],
+      "purpose": "Low-noise candidate check for object-boundary mismatches after MCP or scanner context already identified the route family.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "A scanner issue, proxy history cluster, or MCP issue context already points at one object family.",
+      "stop_when": "One clean role-separated object diff is captured in Repeater.",
+      "recommended_burp_feature": "Repeater plus Logger diff view",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "stored-xss-viewer-check",
+      "name": "Stored XSS Viewer Path Check",
+      "path": "stored_xss_viewer_path_check.bcheck",
+      "applies_to": ["stored-xss", "xss"],
+      "purpose": "Separate storage-path candidates from later viewer-path proof so the operator can build a clean evidence chain.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "A comment, post, profile, note, or feedback workflow is already in scope and the bridge has marked a likely storage sink.",
+      "stop_when": "One viewer path and one render proof are paired to the same stored marker.",
+      "recommended_burp_feature": "Logger plus response diff",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "ssrf-callback-check",
+      "name": "SSRF Callback Check",
+      "path": "ssrf_callback_check.bcheck",
+      "applies_to": ["ssrf"],
+      "purpose": "Bounded out-of-band callback confirmation for request families that already look like fetch sinks.",
+      "scan_mode": "bounded-active",
+      "noise_profile": "medium",
+      "best_when": "MCP or scanner context already points at a URL-like parameter, webhook field, proxy field, or callback sink.",
+      "stop_when": "One exact request variant produces one correlatable Collaborator interaction.",
+      "recommended_burp_feature": "Collaborator plus Repeater",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "auth-boundary-check",
+      "name": "Auth Boundary Check",
+      "path": "auth_boundary_check.bcheck",
+      "applies_to": ["authentication", "auth-bypass", "api-bfl"],
+      "purpose": "Flag privileged-route candidates so the operator can compare lower-privilege, expired, and logged-out states on one route family.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "The target has admin, internal, moderation, management, or export-style routes that are already reachable in normal browsing.",
+      "stop_when": "One denied baseline and one stronger unauthorized access proof are captured.",
+      "recommended_burp_feature": "Repeater with session variants",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "csrf-state-change-check",
+      "name": "CSRF State Change Check",
+      "path": "csrf_state_change_check.bcheck",
+      "applies_to": ["csrf"],
+      "purpose": "Highlight likely state-changing requests that lack obvious anti-CSRF markers before the operator performs one bounded forgery comparison.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "The workflow already has a low-risk state change to compare and MCP history shows the request family clearly.",
+      "stop_when": "One low-risk forged state change or one control that blocks it is documented.",
+      "recommended_burp_feature": "Repeater with Origin and token comparison",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "mass-assignment-check",
+      "name": "Mass Assignment Field Check",
+      "path": "mass_assignment_field_check.bcheck",
+      "applies_to": ["mass-assignment", "api-bopla"],
+      "purpose": "Flag workflow-significant JSON fields so the operator can test one bounded extra-field mutation instead of broad guessing.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "JSON APIs accept role, tenant, pricing, approval, ownership, or status fields from the client.",
+      "stop_when": "One server-managed field is accepted, persisted, or honored beyond baseline.",
+      "recommended_burp_feature": "Repeater plus JSON field extraction Bambda",
+      "import_target": "Custom scan checks"
+    },
+    {
+      "id": "business-logic-check",
+      "name": "Business Logic Invariant Check",
+      "path": "business_logic_invariant_check.bcheck",
+      "applies_to": ["business-logic"],
+      "purpose": "Mark request families with pricing, inventory, approval, or quota invariants so the operator can test one business rule change at a time.",
+      "scan_mode": "passive",
+      "noise_profile": "low",
+      "best_when": "The workflow includes money, credits, limits, stock, approvals, or ordering rules.",
+      "stop_when": "One invariant break with a clear business effect is confirmed.",
+      "recommended_burp_feature": "Repeater plus Logger timeline",
+      "import_target": "Custom scan checks"
+    }
+  ]
+}

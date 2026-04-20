@@ -1,0 +1,17 @@
+metadata:
+    language: v1-beta
+    name: "AI Bridge IDOR / BOLA Boundary Check"
+    description: "Low-noise passive candidate check for object-boundary routes that should be manually compared across roles or tenants."
+    author: "AI Bridge"
+    tags: "passive", "idor", "bola", "access-control", "api"
+
+given request then
+    if ({base.request.url} matches "(?i)([?&](id|userId|accountId|tenantId|invoiceId|orderId|projectId|objectId)=|/(users|accounts|tenants|orders|invoices|projects|customers|members)/[^/?#]+)") and
+       ({base.request.headers} matches "(?i)(Cookie:|Authorization:)") and
+       not ({base.response.status_code} matches "(401|403|404)\\b") and
+       ({base.response.body} matches "(?i)(owner|tenant|account|email|invoice|project|organization|user)") then
+        report issue:
+            severity: info
+            confidence: tentative
+            detail: "Candidate object-boundary route detected. Use one role-separated or tenant-separated Repeater comparison before escalating this into an IDOR or BOLA finding."
+            remediation: "Authorize every direct object access path on the server side for the active user, tenant, and operation."
